@@ -46,29 +46,28 @@ def get_accessions_with_feature_type_and_length(
 def main():
     print(
         '''Equivalent to legacy.uniprot.org request:
-      annotation:(type:motif 9aatad length:[10 TO *]) AND organism:"Homo sapiens (Human) [9606]"'''
+ annotation:(type:motif 9aatad length:[10 TO *]) AND organism:"Homo sapiens (Human) [9606]"'''
     )
     ft_type = "motif"
     ft_description = "9aaTAD"
-    ft_min_length = "*"
+    ft_min_length = 10
     ft_max_length = "*"
     and_query = "(organism_id:9606)"
     accessions_with_feature_type_and_length = (
         get_accessions_with_feature_type_and_length(
-            ft_type,
-            ft_description,
-            ft_min_length,
-            ft_max_length,
+            ft_type, ft_description, ft_min_length, ft_max_length, and_query
         )
     )
 
     results_file = "results.list"
+    n_results = 0
     with open(results_file, "w") as f:
         for batch in accessions_with_feature_type_and_length:
             for entry in batch:
+                n_results += 1
                 print(entry["primaryAccession"], file=f)
 
-    print(f"Results saved in file {results_file}")
+    print(f"{n_results} results saved in file {results_file}")
 
 
 if __name__ == "__main__":
