@@ -52,7 +52,8 @@ def search_stream(query, namespace="uniprotkb"):
     return results_response.json()["results"]
 
 
-query = "cdc7 human"
-results_pagination = [r for batch in search_pagination(query, 50) for r in batch]
-results_stream = search_stream(query)
-assert results_pagination == results_stream
+if __name__ == "__main__":
+    query = "cdc7 human"
+    results_pagination = [r for batch in search_pagination(query, 50) for r in batch]
+    results_stream = search_stream(query)
+    assert len(results_pagination) == len(results_stream)
