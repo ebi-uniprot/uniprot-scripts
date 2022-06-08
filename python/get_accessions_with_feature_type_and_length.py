@@ -45,8 +45,8 @@ def get_accessions_with_feature_type_and_length(
 
 
 print(
-    """Equivalent to legacy request:
-  annotation:(type:motif 9aatad length:[10 TO *]) AND organism:\"Homo sapiens (Human) [9606]\""""
+    '''Equivalent to legacy.uniprot.org request:
+  annotation:(type:motif 9aatad length:[10 TO *]) AND organism:"Homo sapiens (Human) [9606]"'''
 )
 ft_type = "motif"
 ft_description = "9aaTAD"
