@@ -13,33 +13,31 @@ def fetch(url):
     return response
 
 
-def get_next_link(response):
-    headers = response.headers
+def get_next_link(headers):
     if "Link" in headers:
         match = re_next_link.match(headers["Link"])
         if match:
             return match.group(1)
 
 
-def get_total(response):
-    headers = response.headers
+def get_total(headers):
     if "x-total-records" in headers:
         return int(headers["x-total-records"])
 
 
-def search_pagination(query, size=500, namespace="uniprotkb"):
+def search_pagination(query, size=100, namespace="uniprotkb"):
     params = {"query": query, "size": size}
     endpoint = f"https://rest.uniprot.org/{namespace}/search"
     url = f"{endpoint}?{urllib.parse.urlencode(params)}"
     n_results = 0
     while url:
-        results_response = fetch(url)
-        total = get_total(results_response)
-        results = results_response.json()["results"]
+        response = fetch(url)
+        total = get_total(response.headers)
+        results = response.json()["results"]
         n_results += len(results)
         print(f"fetched {n_results}/{total}")
         yield results
-        url = get_next_link(results_response)
+        url = get_next_link(response.headers)
 
 
 def search_stream(query, namespace="uniprotkb"):
@@ -48,8 +46,8 @@ def search_stream(query, namespace="uniprotkb"):
     }
     endpoint = f"https://rest.uniprot.org/{namespace}/stream"
     url = f"{endpoint}?{urllib.parse.urlencode(params)}"
-    results_response = fetch(url)
-    return results_response.json()["results"]
+    response = fetch(url)
+    return response.json()["results"]
 
 
 def main():
