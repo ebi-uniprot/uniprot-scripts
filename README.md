@@ -1,8 +1,12 @@
-# Requirements
+# uniprot-scripts
+
+This repository contains scripts that demonstrates different ways to interact with the rest.uniprot.org API.
+
+## Requirements
 
 Python 3
 
-# Installation
+## Installation
 
 ```
 git clone https://github.com/ebi-uniprot/uniprot-scripts.git
@@ -10,9 +14,9 @@ cd uniprot-scripts
 pip3 install requests
 ```
 
-# Python scripts
+## Python scripts
 
-## get_accessions_with_feature_type_and_length.py
+### get_accessions_with_feature_type_and_length.py
 
 This script can be used from the command line as seen in the following example:
 
@@ -28,7 +32,7 @@ This script can be used from the command line as seen in the following example:
 
 The saved results can then be used as part of a Retrieve/ID mapping job to retreive additional data (eg FASTA, TSV, JSON)
 
-## search.py
+### search.py
 
 You can use `search.py` as a template for writing your own scripts or just modify the `main()` function with your own parameters. This file contains two different ways to perform a search: pagination and streaming:
 
