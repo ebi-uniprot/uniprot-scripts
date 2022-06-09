@@ -18,7 +18,7 @@ pip3 install requests
 
 ### get_accessions_with_feature_type_and_length.py
 
-This script queries UniProtKB for features with type, description and length conditions all satisfied at the same time. It can called from the command line as seen in the following example:
+This script queries UniProtKB for features with type, description and length conditions all satisfied at the same time. It can be called from the command line as seen in the following example:
 
 ```
 ./python/get_accessions_with_feature_type_and_length.py \
@@ -34,7 +34,7 @@ The saved results can then be used as part of a Retrieve/ID mapping job to retre
 
 ### search.py
 
-You can use `search.py` as a template for writing your own scripts or just modify the `main()` function with your own parameters. This file contains two different ways to perform a search: pagination and streaming:
+You can use `search.py` as a template for writing your own scripts or just modify the `main()` function with your own parameters. This file contains two different ways to perform a search, pagination and streaming:
 
 ```
 search_pagination(query, size=100, namespace="uniprotkb")
