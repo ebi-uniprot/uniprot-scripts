@@ -26,7 +26,7 @@ This script can be used from the command line as seen in the following example:
 --out results.list
 ```
 
-The saved results can then be used as part of a Retrieve/ID mapping query to retreive additional data (eg FASTA, TSV, JSON)
+The saved results can then be used as part of a Retrieve/ID mapping job to retreive additional data (eg FASTA, TSV, JSON)
 
 ## search.py
 
