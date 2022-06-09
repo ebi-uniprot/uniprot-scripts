@@ -10,14 +10,14 @@ cd uniprot-scripts
 pip3 install requests
 ```
 
-# Scripts
+# Python scripts
 
 ## get_accessions_with_feature_type_and_length.py
 
 This script can be used from the command line as seen in the following example:
 
 ```
-./get_accessions_with_feature_type_and_length.py \
+./python/get_accessions_with_feature_type_and_length.py \
 --ft_type "motif" \
 --ft_description "9aaTAD" \
 --ft_min_length 10 \
