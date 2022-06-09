@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import re
+import argparse
 from search import search_pagination
 
 
@@ -8,8 +9,8 @@ def filter_feature_type_and_length(
 ):
     features = result["features"]
     for feature in features:
-        if ft_type == feature["type"].lower() and re_ft_description.search(
-            feature["description"]
+        if ft_type == feature["type"].lower() and (
+            not re_ft_description or re_ft_description.search(feature["description"])
         ):
             start = feature["location"]["start"]["value"]
             end = feature["location"]["end"]["value"]
@@ -24,12 +25,21 @@ def filter_feature_type_and_length(
 def get_accessions_with_feature_type_and_length(
     ft_type, ft_description, ft_min_length, ft_max_length, and_query=None
 ):
-    re_ft_description = re.compile(
-        ft_description.replace(" ", "[- /()]+"), re.IGNORECASE
-    )
+
+    if ft_description == "*":
+        re_ft_description = None
+    else:
+        re_ft_description = re.compile(
+            ft_description.replace(" ", "[- /()]+"), re.IGNORECASE
+        )
+    if ft_min_length != "*":
+        ft_min_length = int(ft_min_length)
+    if ft_max_length != "*":
+        ft_max_length = int(ft_max_length)
     and_query = f" AND {and_query}" if and_query else ""
+
     query = f"(ft_{ft_type}:{ft_description} AND ftlen_{ft_type}:[{ft_min_length} TO {ft_max_length}]){and_query}"
-    for results in search_pagination(query):
+    for results in search_pagination(query, 50):
         yield [
             result
             for result in results
@@ -44,30 +54,35 @@ def get_accessions_with_feature_type_and_length(
 
 
 def main():
-    print(
-        '''Equivalent to legacy.uniprot.org request:
- annotation:(type:motif 9aatad length:[10 TO *]) AND organism:"Homo sapiens (Human) [9606]"'''
+    parser = argparse.ArgumentParser(
+        description="Query UniProtKB for features with type, description and length conditions all satisfied at the same time."
     )
-    ft_type = "motif"
-    ft_description = "9aaTAD"
-    ft_min_length = 10
-    ft_max_length = "*"
-    and_query = "(organism_id:9606)"
+    parser.add_argument("--ft_type", type=str)
+    parser.add_argument("--ft_description", type=str, default="*")
+    parser.add_argument("--ft_min_length", type=str, default="*")
+    parser.add_argument("--ft_max_length", type=str, default="*")
+    parser.add_argument("--and_query", type=str, default=None)
+    parser.add_argument("--out", type=str, default="results.list")
+    args = parser.parse_args()
+
     accessions_with_feature_type_and_length = (
         get_accessions_with_feature_type_and_length(
-            ft_type, ft_description, ft_min_length, ft_max_length, and_query
+            args.ft_type,
+            args.ft_description,
+            args.ft_min_length,
+            args.ft_max_length,
+            args.and_query,
         )
     )
 
-    results_file = "results.list"
     n_results = 0
-    with open(results_file, "w") as f:
+    with open(args.out, "w") as f:
         for batch in accessions_with_feature_type_and_length:
             for entry in batch:
                 n_results += 1
                 print(entry["primaryAccession"], file=f)
 
-    print(f"{n_results} results saved in file {results_file}")
+    print(f"{n_results} results saved in file {args.out}")
 
 
 if __name__ == "__main__":
