@@ -18,7 +18,7 @@ pip3 install requests
 
 ### get_accessions_with_feature_type_and_length.py
 
-This script queries UniProtKB for features with type, description and length conditions all satisfied at the same time. This script can be used from the command line as seen in the following example:
+This script queries UniProtKB for features with type, description and length conditions all satisfied at the same time. It can called from the command line as seen in the following example:
 
 ```
 ./python/get_accessions_with_feature_type_and_length.py \
