@@ -34,7 +34,7 @@ The saved results can then be used as part of a Retrieve/ID mapping job to retre
 
 ### search.py
 
-You can use `search.py` as a template for writing your own scripts or just modify the `main()` function with your own parameters. This file contains two different ways to perform a search: pagination and streaming, described below:
+You can use `search.py` as a template for writing your own scripts or just modify the `main()` function with your own parameters. This file contains two different ways to perform a search:
 
 ```
 search_pagination(query, size=100, namespace="uniprotkb")
