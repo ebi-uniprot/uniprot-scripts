@@ -4,7 +4,7 @@ import argparse
 from search import search_pagination
 
 
-def filter_feature_type_and_length(
+def filter_feature_type_description_length(
     result, ft_type, re_ft_description, ft_min_length, ft_max_length
 ):
     features = result["features"]
@@ -22,7 +22,7 @@ def filter_feature_type_and_length(
     return False
 
 
-def get_accessions_with_feature_type_and_length(
+def get_accessions_with_feature_type_description_length(
     ft_type, ft_description, ft_min_length, ft_max_length, and_query=None
 ):
 
@@ -43,7 +43,7 @@ def get_accessions_with_feature_type_and_length(
         yield [
             result
             for result in results
-            if filter_feature_type_and_length(
+            if filter_feature_type_description_length(
                 result,
                 ft_type.lower(),
                 re_ft_description,
@@ -66,7 +66,7 @@ def main():
     args = parser.parse_args()
 
     accessions_with_feature_type_and_length = (
-        get_accessions_with_feature_type_and_length(
+        get_accessions_with_feature_type_description_length(
             args.ft_type,
             args.ft_description,
             args.ft_min_length,
