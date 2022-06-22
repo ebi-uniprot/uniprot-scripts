@@ -2,12 +2,17 @@
 import re
 import urllib
 import requests
+from requests.adapters import HTTPAdapter, Retry
 
 re_next_link = re.compile(r'<(.+)>; rel="next"')
 
+retries = Retry(total=5, backoff_factor=0.25, status_forcelist=[500, 502, 503, 504])
+session = requests.Session()
+session.mount("https://", HTTPAdapter(max_retries=retries))
+
 
 def fetch(url):
-    response = requests.get(url)
+    response = session.get(url)
     if not response.ok:
         raise Exception(response.reason)
     return response
