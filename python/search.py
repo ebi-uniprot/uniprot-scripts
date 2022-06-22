@@ -31,9 +31,7 @@ def get_total(headers):
 
 
 def search_pagination(query, size=100, namespace="uniprotkb"):
-    params = {"query": query, "size": size}
-    endpoint = f"https://rest.uniprot.org/{namespace}/search"
-    url = f"{endpoint}?{urllib.parse.urlencode(params)}"
+    url = get_query_url(query, "search", size, namespace)
     n_results = 0
     while url:
         response = fetch(url)
@@ -45,14 +43,23 @@ def search_pagination(query, size=100, namespace="uniprotkb"):
         url = get_next_link(response.headers)
 
 
-def search_stream(query, namespace="uniprotkb"):
+def get_query_url(query, endpoint, size=None, namespace="uniprotkb"):
     params = {
         "query": query,
     }
-    endpoint = f"https://rest.uniprot.org/{namespace}/stream"
-    url = f"{endpoint}?{urllib.parse.urlencode(params)}"
+    endpoint = f"https://rest.uniprot.org/{namespace}/{endpoint}"
+    if size is not None:
+        params[size] = size
+    return f"{endpoint}?{urllib.parse.urlencode(params)}"
+
+
+def search_stream(query, namespace="uniprotkb"):
+    url = get_query_url(query, "stream", None, namespace)
     response = fetch(url)
     return response.json()["results"]
+
+
+# def download_search_stream(query, namespace="uniprotkb"):
 
 
 def main():
