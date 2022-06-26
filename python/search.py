@@ -11,10 +11,9 @@ session = requests.Session()
 session.mount("https://", HTTPAdapter(max_retries=retries))
 
 
-def fetch(url):
-    response = session.get(url)
-    if not response.ok:
-        raise Exception(response.reason)
+def fetch(url, stream=False):
+    response = session.get(url, stream=stream)
+    response.raise_for_status()
     return response
 
 
@@ -59,7 +58,14 @@ def search_stream(query, namespace="uniprotkb"):
     return response.json()["results"]
 
 
-# def download_search_stream(query, namespace="uniprotkb"):
+def download_search_stream(query, filename, namespace="uniprotkb"):
+    url = get_query_url(query, "stream", None, namespace)
+    print(url)
+    with fetch(url, stream=True) as request:
+        request.raise_for_status()
+        with open(filename, "wb") as f:
+            for chunk in request.iter_content(chunk_size=2**20):
+                f.write(chunk)
 
 
 def main():
