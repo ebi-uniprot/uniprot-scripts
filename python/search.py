@@ -48,7 +48,7 @@ def get_query_url(query, endpoint, size=None, namespace="uniprotkb"):
     }
     endpoint = f"https://rest.uniprot.org/{namespace}/{endpoint}"
     if size is not None:
-        params[size] = size
+        params["size"] = size
     return f"{endpoint}?{urllib.parse.urlencode(params)}"
 
 
@@ -64,7 +64,7 @@ def download_search_stream(query, filename, namespace="uniprotkb"):
     with fetch(url, stream=True) as request:
         request.raise_for_status()
         with open(filename, "wb") as f:
-            for chunk in request.iter_content(chunk_size=2**20):
+            for chunk in request.iter_content(chunk_size=2 ** 20):
                 f.write(chunk)
 
 
